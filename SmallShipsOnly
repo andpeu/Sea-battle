@@ -1,0 +1,554 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <windows.h>
+
+using namespace std;
+
+class Game {
+protected:
+    char field[10][10];
+    int lives = 3, score = 0, small_ships = 3, big_ships = 0, ships = small_ships + big_ships;
+};
+
+class Player : public Game {
+protected:
+    string name;
+public:
+    Player() {
+
+    };
+    Player(string n) : name(n) {
+        srand(time(0));
+        for (size_t i = 0; i < 10; i++)
+        {
+            for (size_t j = 0; j < 10; j++)
+            {
+                field[i][j] = ' ';
+            }
+        }
+    };
+    void generate() { //генерация поля
+        srand(time(0));
+        for (size_t i = 0; i < ships; i++)
+        {
+            if (field[rand() % 10][rand() % 10] == '0') {
+                srand(time(0));
+                
+                field[rand() % 10][rand() % 10] = '0';
+            }
+            else
+                field[rand() % 10][rand() % 10] = '0';
+        }
+    }
+    void show() {
+        cout << name << endl;
+    }
+    void showField() { //показать поле игрока
+        cout << "Поле игрока " << name << " :" << endl;
+        cout << "   1|2|3|4|5|6|7|8|9|10" << endl;
+        int temp = 65;
+        for (size_t i = 0; i < 10; i++)
+        {
+            cout << char(temp++) << " |";
+            for (size_t j = 0; j < 10; j++)
+            {
+                cout << field[i][j] << '|';
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+    void showFieldHidden() { //показать поле без кораблей
+        cout << "Поле игрока " << name << " :" << endl;
+        cout << "   1|2|3|4|5|6|7|8|9|10" << endl;
+        int temp = 65;
+        for (size_t i = 0; i < 10; i++)
+        {
+            cout << char(temp++) << " |";
+            for (size_t j = 0; j < 10; j++)
+            {
+                if (field[i][j] == '0') {
+                    cout << ' ' << '|';
+                }
+                else
+                    cout << field[i][j] << '|';
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+    void createField() {
+        
+        int inp1, inp2 = 0;
+        char tmp; bool run = true;
+        for (size_t i = ships; i > 0; i--)
+        {
+            showField();
+            while (true) {
+                run = true;
+                while (run == true) {
+                    cout << "\nУ вас в наличии " << i << " кораблей. ";
+                    cout << "Где расположить? (Введите букву и цифру, например A и 1): ";
+                    cin >> tmp >> inp1;
+                    switch (tmp) {
+                    case 'A': {
+                        inp2 = 1;
+                        run = false;
+                        break;
+
+                    }
+                    case 'B': {
+                        inp2 = 2;
+                        run = false;
+                        break;
+                    }
+                    case 'C': {
+                        inp2 = 3;
+                        run = false;
+                        break;
+                    }
+                    case 'D': {
+                        inp2 = 4;
+                        run = false;
+                        break;
+                    }
+                    case 'E': {
+                        inp2 = 5;
+                        run = false;
+                        break;
+                    }
+                    case 'F': {
+                        inp2 = 6;
+                        run = false;
+                        break;
+                    }
+                    case 'G': {
+                        inp2 = 7;
+                        run = false;
+                        break;
+                    }
+                    case 'H': {
+                        inp2 = 8;
+                        run = false;
+                        break;
+                        
+                    }
+                    case 'I': {
+                        inp2 = 9;
+                        run = false;
+                        break;
+                        
+                    }
+                    case 'J': {
+                        inp2 = 10;
+                        run = false;
+                        break;
+                        
+                    }
+                    default: cout << "Неверный ввод. Попробуйте снова\n"; run = true;
+                    }
+                }
+                if (field[inp2 - 1][inp1 - 1] == '0') {
+                    cout << "Здесь уже стоит корабль.\n";
+                    continue;
+                }
+                else {
+                    field[inp2 - 1][inp1 - 1] = '0';
+                    break;
+                }
+            }
+        }
+        showField();
+        cout << endl;
+        
+        
+    }
+    bool winCheck() {
+        if (score == ships) {
+            return true;
+        }
+        else
+            return false;
+    }
+    Player operator+(Player& N) { //выстрел в сторону противника
+        N.showField();
+        int inp1, inp2 = 0;
+        char tmp;
+        while (true) {
+            while (true) {
+                cout << "Введите букву и цифру (Например A и 1): ";
+                cin >> tmp >> inp1;
+                switch (tmp) {
+                case 'A': {
+                    inp2 = 1;
+                    break;
+                }
+                case 'B': {
+                    inp2 = 2;
+                    break;
+                }
+                case 'C': {
+                    inp2 = 3;
+                    break;
+                }
+                case 'D': {
+                    inp2 = 4;
+                    break;
+                }
+                case 'E': {
+                    inp2 = 5;
+                    break;
+                }
+                case 'F': {
+                    inp2 = 6;
+                    break;
+                }
+                case 'G': {
+                    inp2 = 7;
+                    break;
+                }
+                case 'H': {
+                    inp2 = 8;
+                    break;
+                }
+                case 'I': {
+                    inp2 = 9;
+                    break;
+                }
+                case 'J': {
+                    inp2 = 10;
+                    break;
+                }
+                default: cout << "Неверный ввод. Попробуйте снова\n"; continue;
+                }
+                if (N.field[inp2 - 1][inp1 - 1] == '*') {
+                    cout << "Ход сюда уже был сделан.\n";
+
+                    continue;
+                }
+                else { break; }
+            }
+            if (N.field[inp2 - 1][inp1 - 1] == '0') {
+                N.field[inp2 - 1][inp1 - 1] = 'X';
+                N.lives--;
+                score++;
+                cout << "Игрок " << name << " попал. Кол - во убитых кораблей : " << score << endl;
+                Sleep(1000);
+            }
+            else {
+                N.field[inp2 - 1][inp1 - 1] = '*';
+                break;
+                Sleep(1000);
+            }
+            if (score == ships) {
+                break;
+            }
+        }
+        N.showField();
+        return *this;
+    }
+
+    Player operator-(Player& N) {
+        N.showField();
+
+        while (true) {
+            
+            if (N.field[(rand() % 10 - 1) - 1][(rand() % 10 - 1) - 1] == '*') {
+                continue;
+            }
+            else if (N.field[(rand() % 10 - 1) - 1][(rand() % 10 - 1) - 1] == '0') {
+                N.field[(rand() % 10 - 1) - 1][(rand() % 10 - 1) - 1] = 'X';
+                N.lives--;
+                score++;
+                cout <<  "Игрок " << name <<  " попал. Кол - во убитых кораблей : " << score << endl;
+                Sleep(1000);
+            }
+            else {
+                N.field[(rand() % 10 - 1) - 1][(rand() % 10 - 1) - 1] = '*';
+                break;
+            }
+        }
+        N.showField();
+        return *this;
+    }
+};
+
+
+int main()
+{
+    setlocale(LC_ALL, "rus");
+
+
+    string name, name2;
+    int input = 0;
+
+    while (true) {
+        cout << "=======Морской бой=======\n";
+        cout << " 1 - Начать\n 2 - Выйти\n\n\tВвод: ";
+        cin >> input;
+        if (input == 1) {
+            system("cls");
+            while (true) {
+                cout << "=======Морской бой=======\n";
+                cout << " 1 - Один игрок\n 2 - Два игрока\n 3 - Назад\n\n\tВвод: ";
+                cin >> input;
+                if (input == 1) {
+                    system("cls");
+                    cout << "=======Морской бой=======\n";
+                    cout << "  Введите имя: "; cin >> name; Player A(name), Bot("Computer");
+                    cout << " 1 - Сгенерировать поле\n 2 - Создать поле\n\n\tВвод: ";
+                    cin >> input;
+                    if (input == 1) {
+                        system("cls");
+                        A.generate();
+                        Bot.generate();
+                        A.showField();
+                        cout << "Желаете начать?\n 1 - Да\n 2 - Нет\n\n\tВвод: ";
+                        cin >> input;
+                        if (input == 1) {
+                            system("cls");
+                            while (true) {
+                                cout << "\nХод игрока - "; Bot.show();
+                                Bot - A;
+                                cout << "\nХод игрока - "; A.show();
+                                A + Bot;
+                                cout << "-------------------------------\n";
+                                if (A.winCheck() == true) {
+                                    cout << "Победил игрок - "; A.show();
+                                    cout << endl;
+                                    Sleep(5000);
+                                    system("cls");
+                                    break;
+                                    
+                                    exit;
+                                };
+                                system("cls");
+                            }
+                            /*int random = rand() % 2 - 1;
+
+                            if (random == 1) {
+                                
+                            }
+                            else {
+                                while (true) {
+                                    cout << "\nХод игрока - "; A.show();
+                                    A + Bot;
+                                    cout << "\nХод игрока - "; Bot.show();
+                                    Bot - A;
+                                    cout << "-------------------------------\n";
+                                    system("cls");
+                                }
+                            }*/
+                        }
+                        else if (input == 2) {
+                            system("cls");
+                            break;
+                        }
+                        else {
+                            cout << "Неверный ввод. Попробуйте снова."; continue;
+                        }
+                    }
+                    else if (input == 2) {
+                        system("cls");
+                        A.createField();
+                        Bot.generate();
+                        cout << "Желаете начать?\n 1 - Да\n 2 - Нет\n\n\tВвод: ";
+                        cin >> input;
+                        if (input == 1) {
+                            system("cls");
+                            while (true) {
+                                cout << "\nХод игрока - "; Bot.show();
+                                Bot - A;
+                                cout << "\nХод игрока - "; A.show();
+                                A + Bot;
+                                cout << "-------------------------------\n";
+                                if (A.winCheck() == true) {
+                                    cout << "Победил игрок - "; A.show();
+                                    cout << endl;
+                                    Sleep(5000);
+                                    system("cls");
+                                    break;
+                                    exit;
+                                };
+                                if (Bot.winCheck() == true) {
+                                    cout << "Победил игрок - "; Bot.show();
+                                    cout << endl;
+                                    Sleep(5000);
+                                    system("cls");
+                                    break;
+                                    exit;
+                                };
+                                system("cls");
+                            }
+                            /*int random = rand() % 2 - 1;
+
+                            if (random == 1) {
+
+                            }
+                            else {
+                                while (true) {
+                                    cout << "\nХод игрока - "; A.show();
+                                    A + Bot;
+                                    cout << "\nХод игрока - "; Bot.show();
+                                    Bot - A;
+                                    cout << "-------------------------------\n";
+                                    system("cls");
+                                }
+                            }*/
+                        }
+                        else if (input == 2) {
+                            system("cls");
+                            break;
+                        }
+                        else {
+                            cout << "Неверный ввод. Попробуйте снова."; continue;
+                        }
+                    }
+                }
+                else if (input == 2) {
+                system("cls");
+                cout << "=======Морской бой=======\n";
+                cout << "  Введите имя игрока 1: "; cin >> name; Player A(name);
+                cout << "\n  Введите имя игрока 2: "; cin >> name2; Player B(name2);
+                cout << " 1 - Сгенерировать поля\n 2 - Создать поля\n\n\tВвод: ";
+                cin >> input;
+                if (input == 1) {
+                    system("cls");
+                    A.generate();
+                    Sleep(100);
+                    B.generate();
+                    A.showField();
+                    B.showField();
+                    cout << "Желаете начать?\n 1 - Да\n 2 - Нет\n\n\tВвод: ";
+                    cin >> input;
+                    if (input == 1) {
+                        system("cls");
+                        while (true) {
+                            cout << "\nХод игрока - "; B.show();
+                            B + A;
+                            cout << "\nХод игрока - "; A.show();
+                            A + B;
+                            cout << "-------------------------------\n";
+                            if (A.winCheck() == true) {
+                                cout << "Победил игрок - "; A.show();
+                                cout << endl;
+                                Sleep(5000);
+                                system("cls");
+                                break;
+
+                                exit;
+                            }
+                            if (B.winCheck() == true) {
+                                cout << "Победил игрок - "; B.show();
+                                cout << endl;
+                                Sleep(5000);
+                                system("cls");
+                                break;
+                                exit;
+                            };
+                            system("cls");
+                        }
+                        /*int random = rand() % 2 - 1;
+
+                        if (random == 1) {
+
+                        }
+                        else {
+                            while (true) {
+                                cout << "\nХод игрока - "; A.show();
+                                A + Bot;
+                                cout << "\nХод игрока - "; Bot.show();
+                                Bot - A;
+                                cout << "-------------------------------\n";
+                                system("cls");
+                            }
+                        }*/
+                    }
+                    else if (input == 2) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Неверный ввод. Попробуйте снова."; continue;
+                    }
+                }
+                else if (input == 2) {
+                    system("cls");
+                    A.createField();
+                    system("cls");
+                    B.createField();
+                    cout << "Желаете начать?\n 1 - Да\n 2 - Нет\n\n\tВвод: ";
+                    cin >> input;
+                    if (input == 1) {
+                        system("cls");
+                        while (true) {
+                            cout << "\nХод игрока - "; B.show();
+                            B + A;
+                            cout << "\nХод игрока - "; A.show();
+                            A + B;
+                            cout << "-------------------------------\n";
+                            if (A.winCheck() == true) {
+                                cout << "Победил игрок - "; A.show();
+                                cout << endl;
+                                Sleep(5000);
+                                system("cls");
+                                break;
+                                exit;
+                            }
+                            if (B.winCheck() == true) {
+                                cout << "Победил игрок - "; B.show();
+                                cout << endl;
+                                Sleep(5000);
+                                system("cls");
+                                break;
+                                exit;
+                            };
+                            system("cls");
+                        }
+                        /*int random = rand() % 2 - 1;
+
+                        if (random == 1) {
+
+                        }
+                        else {
+                            while (true) {
+                                cout << "\nХод игрока - "; A.show();
+                                A + Bot;
+                                cout << "\nХод игрока - "; Bot.show();
+                                Bot - A;
+                                cout << "-------------------------------\n";
+                                system("cls");
+                            }
+                        }*/
+                    }
+                    else if (input == 2) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Неверный ввод. Попробуйте снова."; continue;
+                    }
+                }
+                }
+                else if (input == 3) {
+                    system("cls");
+                    break;
+                }
+                else {
+                    cout << "Неверный ответ. Введите номер нужного Вам пункта.\n";
+                    break;
+                    exit;
+                }
+            }
+        }
+        else if (input == 2) {
+            break;
+            exit;
+        }
+        else {
+            cout << "Неверный ответ. Введите номер нужного Вам пункта.\n";
+            break;
+        }
+    }
+}
