@@ -2,6 +2,7 @@
 #include <string>
 #include <ctime>
 #include <windows.h>
+#include <fstream>
 
 using namespace std;
 
@@ -43,6 +44,9 @@ public:
     }
     void show() {
         cout << name << endl;
+    }
+    string getName() {
+        return name;
     }
     void showField() { //показать поле игрока
         cout << "Поле игрока " << name << " :" << endl;
@@ -171,6 +175,9 @@ public:
         else
             return false;
     }
+    int getScore() {
+        return score;
+    }
     Player operator+(Player& N) { //выстрел в сторону противника
         N.showField();
         int inp1, inp2 = 0;
@@ -248,7 +255,6 @@ public:
         N.showField();
         return *this;
     }
-
     Player operator-(Player& N) {
         N.showField();
 
@@ -274,6 +280,11 @@ public:
     }
 };
 
+void printResult(Player& N, Player& M) {
+    ofstream result;
+    result.open("result.txt");
+    result << "=======Морской бой=======\nПобедитель - " << N.getName() << endl << "Со счётом " << N.getScore() << ":" << M.getScore();
+}
 
 int main()
 {
@@ -282,7 +293,8 @@ int main()
 
     string name, name2;
     int input = 0;
-
+    
+    
     while (true) {
         cout << "=======Морской бой=======\n";
         cout << " 1 - Начать\n 2 - Выйти\n\n\tВвод: ";
@@ -311,11 +323,22 @@ int main()
                             while (true) {
                                 cout << "\nХод игрока - "; Bot.show();
                                 Bot - A;
+                                if (Bot.winCheck() == true) {
+                                    cout << "Победил компьютер."; Bot.show();
+                                    cout << "Со счётом " << Bot.getScore() << ":" << A.getScore() << endl;
+                                    printResult(Bot, A);
+                                    cout << endl;
+                                    Sleep(5000);
+                                    system("cls");
+                                    break;
+                                    exit;
+                                };
                                 cout << "\nХод игрока - "; A.show();
                                 A + Bot;
-                                cout << "-------------------------------\n";
                                 if (A.winCheck() == true) {
                                     cout << "Победил игрок - "; A.show();
+                                    cout << "Со счётом " << A.getScore() << ":" << Bot.getScore() << endl;
+                                    printResult(A,Bot);
                                     cout << endl;
                                     Sleep(5000);
                                     system("cls");
@@ -323,6 +346,7 @@ int main()
                                     
                                     exit;
                                 };
+                                cout << "-------------------------------\n";
                                 system("cls");
                             }
                             /*int random = rand() % 2 - 1;
@@ -360,25 +384,29 @@ int main()
                             while (true) {
                                 cout << "\nХод игрока - "; Bot.show();
                                 Bot - A;
+                                if (Bot.winCheck() == true) {
+                                    cout << "Победил компьютер."; Bot.show();
+                                    cout << "Со счётом " << Bot.getScore() << ":" << A.getScore() << endl;
+                                    printResult(Bot, A);
+                                    cout << endl;
+                                    Sleep(5000);
+                                    system("cls");
+                                    break;
+                                    exit;
+                                };
                                 cout << "\nХод игрока - "; A.show();
                                 A + Bot;
-                                cout << "-------------------------------\n";
                                 if (A.winCheck() == true) {
                                     cout << "Победил игрок - "; A.show();
+                                    cout << "Со счётом " << A.getScore() << ":" << Bot.getScore() << endl;
+                                    printResult(A, Bot);
                                     cout << endl;
                                     Sleep(5000);
                                     system("cls");
                                     break;
                                     exit;
                                 };
-                                if (Bot.winCheck() == true) {
-                                    cout << "Победил игрок - "; Bot.show();
-                                    cout << endl;
-                                    Sleep(5000);
-                                    system("cls");
-                                    break;
-                                    exit;
-                                };
+                                cout << "-------------------------------\n";
                                 system("cls");
                             }
                             /*int random = rand() % 2 - 1;
@@ -427,26 +455,30 @@ int main()
                         while (true) {
                             cout << "\nХод игрока - "; B.show();
                             B + A;
-                            cout << "\nХод игрока - "; A.show();
-                            A + B;
-                            cout << "-------------------------------\n";
-                            if (A.winCheck() == true) {
-                                cout << "Победил игрок - "; A.show();
-                                cout << endl;
-                                Sleep(5000);
-                                system("cls");
-                                break;
-
-                                exit;
-                            }
                             if (B.winCheck() == true) {
                                 cout << "Победил игрок - "; B.show();
+                                cout << "Со счётом " << B.getScore() << ":" << A.getScore() << endl;
+                                printResult(B, A);
                                 cout << endl;
                                 Sleep(5000);
                                 system("cls");
                                 break;
                                 exit;
-                            };
+                            }
+                            cout << "\nХод игрока - "; A.show();
+                            A + B;
+                            if (A.winCheck() == true) {
+                                cout << "Победил игрок - "; A.show();
+                                cout << "Со счётом " << A.getScore() << ":" << B.getScore() << endl;
+                                printResult(A, B);
+                                cout << endl;
+                                Sleep(5000);
+                                system("cls");
+                                break;
+                                exit;
+                            }
+                            cout << "-------------------------------\n";
+                            
                             system("cls");
                         }
                         /*int random = rand() % 2 - 1;
@@ -485,25 +517,29 @@ int main()
                         while (true) {
                             cout << "\nХод игрока - "; B.show();
                             B + A;
-                            cout << "\nХод игрока - "; A.show();
-                            A + B;
-                            cout << "-------------------------------\n";
-                            if (A.winCheck() == true) {
-                                cout << "Победил игрок - "; A.show();
+                            if (B.winCheck() == true) {
+                                cout << "Победил игрок - "; B.show();
+                                cout << "Со счётом " << B.getScore() << ":" << A.getScore() << endl;
+                                printResult(B, A);
                                 cout << endl;
                                 Sleep(5000);
                                 system("cls");
                                 break;
                                 exit;
                             }
-                            if (B.winCheck() == true) {
-                                cout << "Победил игрок - "; B.show();
+                            cout << "\nХод игрока - "; A.show();
+                            A + B;
+                            if (A.winCheck() == true) {
+                                cout << "Победил игрок - "; A.show();
+                                cout << "Со счётом " << A.getScore() << ":" << B.getScore() << endl;
+                                printResult(A, B);
                                 cout << endl;
                                 Sleep(5000);
                                 system("cls");
                                 break;
                                 exit;
-                            };
+                            }
+                            cout << "-------------------------------\n";
                             system("cls");
                         }
                         /*int random = rand() % 2 - 1;
