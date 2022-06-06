@@ -9,7 +9,7 @@ using namespace std;
 class Game {
 protected:
     char field[10][10];
-    int lives = 3, score = 0, small_ships = 3, big_ships = 0, ships = small_ships + big_ships;
+    int lives = 3, score = 0, small_ships = 6, big_ships = 0, ships = small_ships + big_ships;
 };
 
 class Player : public Game {
@@ -30,16 +30,20 @@ public:
         }
     };
     void generate() { //генерация поля
-        srand(time(0));
+        
+        int inp1, inp2;
         for (size_t i = 0; i < ships; i++)
-        {
-            if (field[rand() % 10][rand() % 10] == '0') {
+        {   
+            inp1 = rand() % 10;
+            inp2 = rand() % 10;
+            if (field[inp1][inp2] == '0') {
                 srand(time(0));
-                
-                field[rand() % 10][rand() % 10] = '0';
+                inp1 = rand() % 10;
+                inp2 = rand() % 10;
+                field[inp1][inp2] = '0';
             }
             else
-                field[rand() % 10][rand() % 10] = '0';
+                field[inp1][inp2] = '0';
         }
     }
     void show() {
